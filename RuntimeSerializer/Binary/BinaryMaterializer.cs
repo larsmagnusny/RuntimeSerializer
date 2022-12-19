@@ -8,46 +8,46 @@ using System.Linq.Expressions;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-namespace RuntimeSerializer
+namespace RuntimeSerializer.Binary
 {
-    public static class Materializer
+    public static class BinaryMaterializer
     {
 #pragma warning disable CS8604 // Possible null reference argument.
         private static Dictionary<Type, MethodInfo> _methodInfosRead = new Dictionary<Type, MethodInfo>()
         {
-            { typeof(byte), typeof(SerializationHelpers).GetMethod("ReadByte") },
-            { typeof(sbyte), typeof(SerializationHelpers).GetMethod("ReadSByte") },
-            { typeof(char), typeof(SerializationHelpers).GetMethod("ReadChar") },
-            { typeof(short), typeof(SerializationHelpers).GetMethod("ReadInt16") },
-            { typeof(ushort), typeof(SerializationHelpers).GetMethod("ReadUInt16") },
-            { typeof(int), typeof(SerializationHelpers).GetMethod("ReadInt32") },
-            { typeof(uint), typeof(SerializationHelpers).GetMethod("ReadUInt32") },
-            { typeof(long), typeof(SerializationHelpers).GetMethod("ReadInt64") },
-            { typeof(ulong), typeof(SerializationHelpers).GetMethod("ReadUInt64") },
-            { typeof(float), typeof(SerializationHelpers).GetMethod("ReadSingle") },
-            { typeof(double), typeof(SerializationHelpers).GetMethod("ReadDouble") },
-            { typeof(decimal), typeof(SerializationHelpers).GetMethod("ReadDecimal") },
-            { typeof(DateTime), typeof(SerializationHelpers).GetMethod("ReadDateTime") },
-            { typeof(DateTimeOffset), typeof(SerializationHelpers).GetMethod("ReadDateTimeOffset") },
-            { typeof(Guid), typeof(SerializationHelpers).GetMethod("ReadGuid") }
+            { typeof(byte), typeof(BinarySerializationHelpers).GetMethod("ReadByte") },
+            { typeof(sbyte), typeof(BinarySerializationHelpers).GetMethod("ReadSByte") },
+            { typeof(char), typeof(BinarySerializationHelpers).GetMethod("ReadChar") },
+            { typeof(short), typeof(BinarySerializationHelpers).GetMethod("ReadInt16") },
+            { typeof(ushort), typeof(BinarySerializationHelpers).GetMethod("ReadUInt16") },
+            { typeof(int), typeof(BinarySerializationHelpers).GetMethod("ReadInt32") },
+            { typeof(uint), typeof(BinarySerializationHelpers).GetMethod("ReadUInt32") },
+            { typeof(long), typeof(BinarySerializationHelpers).GetMethod("ReadInt64") },
+            { typeof(ulong), typeof(BinarySerializationHelpers).GetMethod("ReadUInt64") },
+            { typeof(float), typeof(BinarySerializationHelpers).GetMethod("ReadSingle") },
+            { typeof(double), typeof(BinarySerializationHelpers).GetMethod("ReadDouble") },
+            { typeof(decimal), typeof(BinarySerializationHelpers).GetMethod("ReadDecimal") },
+            { typeof(DateTime), typeof(BinarySerializationHelpers).GetMethod("ReadDateTime") },
+            { typeof(DateTimeOffset), typeof(BinarySerializationHelpers).GetMethod("ReadDateTimeOffset") },
+            { typeof(Guid), typeof(BinarySerializationHelpers).GetMethod("ReadGuid") }
         };
         private static Dictionary<Type, MethodInfo> _methodInfosWrite = new Dictionary<Type, MethodInfo>()
         {
-            { typeof(byte), typeof(SerializationHelpers).GetMethod("WriteByte") },
-            { typeof(sbyte), typeof(SerializationHelpers).GetMethod("WriteSByte") },
-            { typeof(char), typeof(SerializationHelpers).GetMethod("WriteChar") },
-            { typeof(short), typeof(SerializationHelpers).GetMethod("WriteInt16") },
-            { typeof(ushort), typeof(SerializationHelpers).GetMethod("WriteUInt16") },
-            { typeof(int), typeof(SerializationHelpers).GetMethod("WriteInt32") },
-            { typeof(uint), typeof(SerializationHelpers).GetMethod("WriteUInt32") },
-            { typeof(long), typeof(SerializationHelpers).GetMethod("WriteInt64") },
-            { typeof(ulong), typeof(SerializationHelpers).GetMethod("WriteUInt64") },
-            { typeof(float), typeof(SerializationHelpers).GetMethod("WriteSingle") },
-            { typeof(double), typeof(SerializationHelpers).GetMethod("WriteDouble") },
-            { typeof(decimal), typeof(SerializationHelpers).GetMethod("WriteDecimal") },
-            { typeof(DateTime), typeof(SerializationHelpers).GetMethod("WriteDateTime") },
-            { typeof(DateTimeOffset), typeof(SerializationHelpers).GetMethod("WriteDateTimeOffset") },
-            { typeof(Guid), typeof(SerializationHelpers).GetMethod("WriteGuid") }
+            { typeof(byte), typeof(BinarySerializationHelpers).GetMethod("WriteByte") },
+            { typeof(sbyte), typeof(BinarySerializationHelpers).GetMethod("WriteSByte") },
+            { typeof(char), typeof(BinarySerializationHelpers).GetMethod("WriteChar") },
+            { typeof(short), typeof(BinarySerializationHelpers).GetMethod("WriteInt16") },
+            { typeof(ushort), typeof(BinarySerializationHelpers).GetMethod("WriteUInt16") },
+            { typeof(int), typeof(BinarySerializationHelpers).GetMethod("WriteInt32") },
+            { typeof(uint), typeof(BinarySerializationHelpers).GetMethod("WriteUInt32") },
+            { typeof(long), typeof(BinarySerializationHelpers).GetMethod("WriteInt64") },
+            { typeof(ulong), typeof(BinarySerializationHelpers).GetMethod("WriteUInt64") },
+            { typeof(float), typeof(BinarySerializationHelpers).GetMethod("WriteSingle") },
+            { typeof(double), typeof(BinarySerializationHelpers).GetMethod("WriteDouble") },
+            { typeof(decimal), typeof(BinarySerializationHelpers).GetMethod("WriteDecimal") },
+            { typeof(DateTime), typeof(BinarySerializationHelpers).GetMethod("WriteDateTime") },
+            { typeof(DateTimeOffset), typeof(BinarySerializationHelpers).GetMethod("WriteDateTimeOffset") },
+            { typeof(Guid), typeof(BinarySerializationHelpers).GetMethod("WriteGuid") }
         };
 #pragma warning restore CS8604 // Possible null reference argument.
 
@@ -65,7 +65,7 @@ namespace RuntimeSerializer
 
             return Expression.Call(null, methodInfo, streamParameter);
         }
-        
+
         public static Expression[] WriteByte(ParameterExpression streamParameter, Expression input, MemberInfo member, Type type, Expression byteCounter)
         {
             var methodInfo = _methodInfosWrite[type];
@@ -136,7 +136,7 @@ namespace RuntimeSerializer
                             Expression.LessThan(i, Expression.Property(inputVar, lengthProperty)),
                             Expression.Block(
                                 Expression.AddAssign(byteCounterExp, Expression.Call(serializeMethod, Expression.ArrayIndex(inputVar, i), parameters[1])),
-                                Expression.PostIncrementAssign(i)), 
+                                Expression.PostIncrementAssign(i)),
                             Expression.Break(breakLabel))), breakLabel);
 
                 expressions.Add(WriteArrayLength(parameters[1], Expression.Property(inputVar, lengthProperty), byteCounterExp));
@@ -156,7 +156,7 @@ namespace RuntimeSerializer
             // Create instance
             var addExp = Expression.Add(byteCounterExp, Expression.Constant(1));
 
-            foreach(var member in members)
+            foreach (var member in members)
             {
                 Type? memberType = default;
 
@@ -248,7 +248,7 @@ namespace RuntimeSerializer
 
                 var underlyingType = Nullable.GetUnderlyingType(memberType);
 
-                if(underlyingType != null)
+                if (underlyingType != null)
                 {
                     memberAssignments.Add(Read(parameter, member, memberType));
                     continue;

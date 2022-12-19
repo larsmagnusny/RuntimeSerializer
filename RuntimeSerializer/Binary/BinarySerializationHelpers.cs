@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RuntimeSerializer
+namespace RuntimeSerializer.Binary
 {
-    public class SerializationHelpers
+    public class BinarySerializationHelpers
     {
         #region Writers
         public static int WriteByte(Stream stream, byte value)
@@ -118,14 +118,14 @@ namespace RuntimeSerializer
 
             Span<int> bits = stackalloc int[4];
             // (int)d.Low, (int)d.Mid, (int)d.High, d._flags
-            Decimal.TryGetBits(value, bits, out var count);
+            decimal.TryGetBits(value, bits, out var count);
 
             Span<byte> buffer = stackalloc byte[s];
 
-            for(var i = 0; i < 4; i++)
+            for (var i = 0; i < 4; i++)
             {
                 BinaryPrimitives.WriteInt32LittleEndian(buffer, bits[i]);
-                stream.Write(buffer); 
+                stream.Write(buffer);
                 byteCount += s;
             }
 
@@ -169,7 +169,7 @@ namespace RuntimeSerializer
         {
             var s = sizeof(char);
             Span<byte> buffer = stackalloc byte[s];
-            
+
             stream.ReadExactly(buffer);
 
             return (char)BinaryPrimitives.ReadInt16LittleEndian(buffer);

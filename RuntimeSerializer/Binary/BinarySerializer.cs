@@ -1,4 +1,4 @@
-﻿namespace RuntimeSerializer
+﻿namespace RuntimeSerializer.Binary
 {
     public class BinarySerializer
     {
@@ -9,13 +9,13 @@
         {
             var type = typeof(T);
 
-            if(!_serializers.ContainsKey(type))
+            if (!_serializers.ContainsKey(type))
             {
-                _serializers[type] = Materializer.CreateSerializer<T>();
+                _serializers[type] = BinaryMaterializer.CreateSerializer<T>();
             }
             if (!_deserializers.ContainsKey(type))
             {
-                _deserializers[type] = Materializer.CreateDeserializer<T>();
+                _deserializers[type] = BinaryMaterializer.CreateDeserializer<T>();
             }
         }
 

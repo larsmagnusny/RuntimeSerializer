@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BenchmarkDotNet.Attributes;
-using RuntimeSerializer;
+using RuntimeSerializer.Binary;
 
 namespace Benchmark
 {
