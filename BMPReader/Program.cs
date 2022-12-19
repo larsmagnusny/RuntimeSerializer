@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
-using System.Runtime.InteropServices;
 using BMPReader;
 using RuntimeSerializer.Binary;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 internal class Program
 {

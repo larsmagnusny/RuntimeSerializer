@@ -1,20 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Linq.Expressions;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
-using System.Reflection.Metadata;
-
 namespace RuntimeSerializer.Binary
 {
     public static class BinaryMaterializer
     {
-#pragma warning disable CS8604 // Possible null reference argument.
-        private static Dictionary<Type, MethodInfo> _methodInfosRead = new Dictionary<Type, MethodInfo>()
+        private static Dictionary<Type, MethodInfo?> _methodInfosRead = new Dictionary<Type, MethodInfo?>()
         {
             { typeof(bool), typeof(BinarySerializationHelpers).GetMethod("ReadBool") },
             { typeof(byte), typeof(BinarySerializationHelpers).GetMethod("ReadByte") },
@@ -34,7 +24,7 @@ namespace RuntimeSerializer.Binary
             { typeof(Guid), typeof(BinarySerializationHelpers).GetMethod("ReadGuid") },
             { typeof(string), typeof(BinarySerializationHelpers).GetMethod("ReadString") }
         };
-        private static Dictionary<Type, MethodInfo> _methodInfosWrite = new Dictionary<Type, MethodInfo>()
+        private static Dictionary<Type, MethodInfo?> _methodInfosWrite = new Dictionary<Type, MethodInfo?>()
         {
             { typeof(bool), typeof(BinarySerializationHelpers).GetMethod("WriteBool") },
             { typeof(byte), typeof(BinarySerializationHelpers).GetMethod("WriteByte") },
@@ -54,7 +44,6 @@ namespace RuntimeSerializer.Binary
             { typeof(Guid), typeof(BinarySerializationHelpers).GetMethod("WriteGuid") },
             { typeof(string), typeof(BinarySerializationHelpers).GetMethod("WriteString") }
         };
-#pragma warning restore CS8604 // Possible null reference argument.
 
         #region Writers
         public static Expression WriteArrayLength(ParameterExpression streamParameter, Expression value, Expression byteCounter)
@@ -233,7 +222,7 @@ namespace RuntimeSerializer.Binary
                 if (member.MemberType == MemberTypes.Field)
                     memberType = ((FieldInfo)member).FieldType;
 
-                var underlyingType = Nullable.GetUnderlyingType(memberType);
+                Type? underlyingType = Nullable.GetUnderlyingType(memberType);
 
                 if (underlyingType != null)
                 {

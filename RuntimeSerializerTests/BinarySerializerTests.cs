@@ -1,30 +1,25 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using RuntimeSerializer.Binary;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RuntimeSerializer.Tests
 {
     public class TestClass1
     {
-        public byte Value0 { get; set; } // 1
+        public byte Value0 { get; set; }
         public sbyte Value1 { get; set; }
-        public char Value2 { get; set; } // 2
-        public Int16 Value3 { get; set; } // 2
-        public Int32 Value4 { get; set; } // 4
-        public Int64 Value5 { get; set; } // 8
-        public UInt16 Value6 { get; set; } // 2
-        public UInt32 Value7 { get; set; } // 4
-        public UInt64 Value8 { get; set; } // 8
-        public float Value9 { get; set; } // 4
-        public double Value10 { get; set; } // 8
-        public decimal Value11 { get; set; } // 16
-        public DateTime Value12 { get; set; } // 8
-        public DateTimeOffset Value13 { get; set; } // 16
-        public Guid Value14 { get; set; } // 16
+        public char Value2 { get; set; }
+        public Int16 Value3 { get; set; }
+        public Int32 Value4 { get; set; }
+        public Int64 Value5 { get; set; }
+        public UInt16 Value6 { get; set; }
+        public UInt32 Value7 { get; set; }
+        public UInt64 Value8 { get; set; }
+        public float Value9 { get; set; }
+        public double Value10 { get; set; }
+        public decimal Value11 { get; set; }
+        public DateTime Value12 { get; set; }
+        public DateTimeOffset Value13 { get; set; }
+        public Guid Value14 { get; set; }
     }
 
     public class TestClass2
@@ -49,21 +44,21 @@ namespace RuntimeSerializer.Tests
 
     public class TestClass3
     {
-        public byte Value0 { get; set; } // 1
+        public byte Value0 { get; set; }
         public sbyte Value1 { get; set; }
-        public char Value2 { get; set; } // 2
-        public Int16 Value3 { get; set; } // 2
-        public Int32 Value4 { get; set; } // 4
-        public Int64 Value5 { get; set; } // 8
-        public UInt16 Value6 { get; set; } // 2
-        public UInt32 Value7 { get; set; } // 4
-        public UInt64 Value8 { get; set; } // 8
-        public float Value9 { get; set; } // 4
-        public double Value10 { get; set; } // 8
-        public decimal Value11 { get; set; } // 16
-        public DateTime Value12 { get; set; } // 8
-        public DateTimeOffset Value13 { get; set; } // 16
-        public Guid Value14 { get; set; } // 16
+        public char Value2 { get; set; }
+        public Int16 Value3 { get; set; }
+        public Int32 Value4 { get; set; }
+        public Int64 Value5 { get; set; }
+        public UInt16 Value6 { get; set; }
+        public UInt32 Value7 { get; set; }
+        public UInt64 Value8 { get; set; }
+        public float Value9 { get; set; }
+        public double Value10 { get; set; }
+        public decimal Value11 { get; set; }
+        public DateTime Value12 { get; set; }
+        public DateTimeOffset Value13 { get; set; }
+        public Guid Value14 { get; set; }
         public TestClass1[] Array { get; set; } = System.Array.Empty<TestClass1>();
     }
 
