@@ -5,6 +5,8 @@
         private static readonly Dictionary<Type, Delegate> _serializers = new();
         private static readonly Dictionary<Type, Delegate> _deserializers = new();
 
+        private static object _lock = new object();
+
         public static void Materialize<T>()
         {
             var type = typeof(T);
@@ -22,11 +24,15 @@
         public static int Serialize<T>(T input, Stream stream)
         {
             var type = typeof(T);
+            Func<T, Stream, int> d;
 
-            if (!_serializers.ContainsKey(type))
-                Materialize<T>();
+            lock (_lock)
+            {
+                if (!_serializers.ContainsKey(type))
+                    Materialize<T>();
 
-            var d = _serializers[type] as Func<T, Stream, int>;
+                d = (Func<T, Stream, int>)_serializers[type];
+            }
 
             return d(input, stream);
         }
@@ -34,11 +40,14 @@
         public static T DeSerialize<T>(Stream stream)
         {
             var type = typeof(T);
+            Func<Stream, T> d;
+            lock (_lock)
+            {
+                if (!_deserializers.ContainsKey(type))
+                    Materialize<T>();
 
-            if (!_deserializers.ContainsKey(type))
-                Materialize<T>();
-
-            var d = _deserializers[type] as Func<Stream, T>;
+                d = (Func<Stream, T>)_deserializers[type];
+            }
 
             return d(stream);
         }

@@ -22,6 +22,10 @@ namespace RuntimeSerializer.Binary
 
             return 1;
         }
+        public static int WriteBool(Stream stream, bool value)
+        {
+            return WriteByte(stream, (byte)(value ? 1 : 0));
+        }
         public static int WriteChar(Stream stream, char value)
         {
             var s = sizeof(char);
@@ -150,6 +154,22 @@ namespace RuntimeSerializer.Binary
 
             return buffer.Length;
         }
+
+        public static int WriteString(Stream stream, string value)
+        {
+            if (value == null)
+            {
+                return WriteInt32(stream, -1);
+            }
+
+            var bytes = Encoding.Unicode.GetBytes(value);
+            var counter = WriteInt32(stream, bytes.Length);
+
+            stream.Write(bytes, 0, bytes.Length);
+            counter += bytes.Length;
+
+            return counter;
+        }
         #endregion
 
         #region Readers
@@ -164,6 +184,10 @@ namespace RuntimeSerializer.Binary
             Span<byte> buffer = stackalloc byte[1];
             stream.ReadExactly(buffer);
             return (sbyte)buffer[0];
+        }
+        public static bool ReadBool(Stream stream)
+        {
+            return ReadByte(stream) == 1;
         }
         public static char ReadChar(Stream stream)
         {
@@ -290,6 +314,26 @@ namespace RuntimeSerializer.Binary
             stream.ReadExactly(buffer);
 
             return new Guid(buffer);
+        }
+
+        public static string ReadString(Stream stream)
+        {
+            var length = ReadInt32(stream);
+
+            if(length < 0)
+            {
+                return null;
+            }
+            if(length == 0)
+            {
+                return string.Empty;
+            }
+
+            var bytes = new byte[length];
+
+            stream.ReadExactly(bytes, 0, bytes.Length);
+
+            return Encoding.Unicode.GetString(bytes);
         }
         #endregion
     }
